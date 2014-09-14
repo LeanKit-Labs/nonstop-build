@@ -1,0 +1,14 @@
+{
+  "name": "test-agent",
+  "version": "0.0.1",
+  "description": "A test project",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "machina": "^0.4.0-1",
+    "monologue.js": "<0.2.0"
+  },
+  "devDependencies": {
+  }
+}

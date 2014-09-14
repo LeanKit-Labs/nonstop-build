@@ -1,0 +1,22 @@
+---
+platforms:
+  darwin: 
+    architecture:
+      - 'x64'
+  linux:
+    architecture:
+      - 'x64'
+projects:
+  project1:
+    path: './'
+    steps:
+      npm:
+        path: './'
+        command: 'npm'
+        arguments:
+          - 'install'
+    pack: 
+      pattern: './node_modules/**,./src/**'
+    reports:
+      plato: './plato'
+      clientTests: './clientTests'
