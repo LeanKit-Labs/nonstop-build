@@ -86,35 +86,35 @@ In this example, the build is only valid on 64 bit darwin or linux OSs. There is
 
 ```json
 {
-  platforms: {
-    darwin: {
-      architecture: [ 'x64' ]
+  "platforms": {
+    "darwin": {
+      "architecture": [ "x64" ]
     }
-    linux: {
-      architecture: [ 'x64' ]
+    "linux": {
+      "architecture": [ "x64" ]
     }
   },
-  projects: {
-    project1: {
-      path: './project1'
-      steps: {
-        npm: {
-          path: './',
-          command: 'npm',
-          arguments: [ 'install' ]
+  "projects": {
+    "project1": {
+      "path": "./project1"
+      "steps": {
+        "npm": {
+          "path": "./",
+          "command": "npm",
+          "arguments": [ "install" ]
         },
-        test: {
-          path: './',
-          command: 'gulp',
-          arguments: [ 'test' ]
+        "test": {
+          "path": "./",
+          "command": "gulp",
+          "arguments": [ "test" ]
         }
       },
-      pack: {
-        pattern: './node_modules/**,./src/**'
+      "pack": {
+        "pattern": "./node_modules/**,./src/**"
       },
-      reports: {
-        plato: './plato'
-        clientTests: './clientTests'
+      "reports": {
+        "plato": "./plato"
+        "clientTests": "./clientTests"
       }
     }
   }
