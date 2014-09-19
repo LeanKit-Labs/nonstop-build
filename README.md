@@ -11,8 +11,8 @@ Continua builds each project based on a set of user defined and implemented step
 ## API
 While there are several modules in this library, consumers will only interact with one method:
 
-### start( repository )
-Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. 
+### start( repository, [projectName] )
+Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a projectName to limit the build to a specific project.
 
 ```javascript
 // repository - either the path to the git repository or metadata about the repository

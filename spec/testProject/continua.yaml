@@ -1,11 +1,9 @@
 ---
 platforms:
-  darwin: 
-    architecture:
-      - 'x64'
-  linux:
-    architecture:
-      - 'x64'
+  - 'darwin'
+  - 'linux'
+architectures:
+  - 'x64'
 projects:
   project1:
     path: './'
