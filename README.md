@@ -1,18 +1,18 @@
-## continua-build
-Library for producing packages from continua build files.
+## nonstop-build
+Library for producing packages from nonstop build files.
 
 ## Approach
-Continua supports 1 or more projects per repository. The build file should specify all projects, their build steps and other metadata that Continua will use to create the package.
+Nonstop supports 1 or more projects per repository. The build file should specify all projects, their build steps and other metadata that nonstop will use to create the package.
 
-Continua builds each project based on a set of user defined and implemented steps. Steps are executed via the shell in order. This approach will support _any_ language and works well with other build tools. The only requirement is that if a build step fails, it should exit with a code other than 0. 
+nonstop builds each project based on a set of user defined and implemented steps. Steps are executed via the shell in order. This approach will support _any_ language and works well with other build tools. The only requirement is that if a build step fails, it should exit with a code other than 0. 
 
   Note: build tools that fail with an exit code of 0 are bad and should feel bad.
 
 ## API
 While there are several modules in this library, consumers will only interact with one method:
 
-### start( repository )
-Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. 
+### start( repository, [projectName] )
+Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a projectName to limit the build to a specific project.
 
 ```javascript
 // repository - either the path to the git repository or metadata about the repository
@@ -24,7 +24,7 @@ build.start( '/path/to/repo' )
 ```
 
 ## Build File
-Each repository should have a single build file in either JSON or YAML format. The build file should be named `continua.json` or `continua.yaml`. (If you like, you can prefix the file name with a dot)
+Each repository should have a single build file in either JSON or YAML format. The build file should be named `nonstop.json` or `nonstop.yaml`. (If you like, you can prefix the file name with a dot)
 
 A build file consists of the following sections:
 
@@ -58,12 +58,12 @@ Each project can contain the following metadata:
 This property sets the top-level working directory that all other paths (specified in steps, patterns and reports) will be relative to.
 
 #### VersionFile
-If you follow common conventions, Continua __should__ be able to locate the file a supported language is using to specify the version. In Node, the package.json file sits at the root of the project. In Erlang, an .app.src file is generally included at the top of the `src` folder. In .Net, Continua will search a few locations for an AssemblyInfo.cs file. If you've put the assembly attributes in another file, you should use this setting to specify the relative path to that file.
+If you follow common conventions, nonstop __should__ be able to locate the file a supported language is using to specify the version. In Node, the package.json file sits at the root of the project. In Erlang, an .app.src file is generally included at the top of the `src` folder. In .Net, nonstop will search a few locations for an AssemblyInfo.cs file. If you've put the assembly attributes in another file, you should use this setting to specify the relative path to that file.
 
-> __!IMPORTANT!__ - you must keep the name and location of the version file consistent throughout the entire life of the repository. Changing this will break Continua's ability to read the version for each commit and determine the version history.
+> __!IMPORTANT!__ - you must keep the name and location of the version file consistent throughout the entire life of the repository. Changing this will break nonstop's ability to read the version for each commit and determine the version history.
 
 #### Steps
-Each build step is a set of parameters that Continua will use to execute the step in the shell. 
+Each build step is a set of parameters that nonstop will use to execute the step in the shell. 
 
  * path - the path (relative to the project's path) where the command should be executed
  * command - the command to issue
@@ -75,10 +75,10 @@ Each step is expected to exit with a code of 0 on success and a non-zero number 
 In some cases, you may need a step that only executes on a specific platform. In this event, you should add the `platform` property with the platform name (or an array of names) that the step is valid for. This would allow you to build a C# project with .Net on Windows and Mono on OSX and Linux.
 
 #### Pack
-The pack property allows you to set a pattern as a comma delimited string or array comprised of globs that Continua will evaluate (relative to the project's path) in order to determine which files should be included in the package's archive.
+The pack property allows you to set a pattern as a comma delimited string or array comprised of globs that nonstop will evaluate (relative to the project's path) in order to determine which files should be included in the package's archive.
 
 #### Reports
-A hash where the key is the report name you want to assign and the value is the relative path to the folder containing report output. This allows Continua's build agent to preserve reports associated with a particular commit's build. The most likely use case for this is code quality or test coverage reports so that you can track these things over time on a per-project basis.
+A hash where the key is the report name you want to assign and the value is the relative path to the folder containing report output. This allows nonstop's build agent to preserve reports associated with a particular commit's build. The most likely use case for this is code quality or test coverage reports so that you can track these things over time on a per-project basis.
 
 ### JSON Example
 
@@ -168,10 +168,10 @@ This would not have been possible without several great Node modules:
  * js-yaml
  * debug
 
- * continua-pack
+ * nonstop-pack
 
 ## Dependents
-The following continua projects rely on this library:
+The following nonstop projects rely on this library:
 
- * [build cli](https://github.com/LeanKit-Labs/continua-cli)
- * [build agent](https://github.com/LeanKit-Labs/continua-agent)
+ * [build cli](https://github.com/LeanKit-Labs/nonstop-cli)
+ * [build agent](https://github.com/LeanKit-Labs/nonstop-agent)

@@ -38,14 +38,14 @@ describe( 'when creating package for a project', function() {
 	it( 'should complete build and package', function() {
 		_.omit( packageInfo, 'files' ).should.eql( {
 			branch: 'master',
-			build: 0,
+			build: packageInfo.build,
 			commit: '',
-			name: 'project1~arobson~master~0.0.0~0~darwin~any~any~x64',
-			output: 'packages/project1~arobson~master~0.0.0~0~darwin~any~any~x64.tar.gz',
+			name: packageInfo.name,
+			output: packageInfo.output,
 			owner: 'arobson',
 			path: 'spec/testProject/',
 			pattern: './node_modules/**,./src/**',
-			version: '0.0.0'
+			version: '0.0.1'
 		} );
 	} );
 

@@ -4,9 +4,10 @@ var buildFile = require( './buildFile.js' );
 var sysInfo = require( './sysInfo.js' )();
 var project;
 
-function build( repoInfo ) {
+function build( repoInfo, projectName ) {
 	return when.promise( function( resolve, reject ) {
-		when.try( createProjects, buildFile.get( repoInfo.path ), repoInfo )
+
+		when.try( createProjects, buildFile.get( repoInfo.path ), repoInfo, projectName )
 			.then( function( projects ) {
 				if( _.isEmpty( projects ) ) {
 					resolve( {} );
@@ -23,12 +24,16 @@ function build( repoInfo ) {
 	} );
 }
 
-function createProjects( config, repoInfo ) {
+function createProjects( config, repoInfo, projectName ) {
 	var platforms = getPlatforms( config );
 	if( _.contains( platforms, sysInfo.platform ) ) {
-		return _.map( config.projects, function( projectConfig, projectName ) {
-			return project.create( projectName, projectConfig, repoInfo );
-		} );
+		if( projectName ) {
+			return [ project.create( projectName, config.projects[ projectName ] ) ];
+		} else {
+			return _.map( config.projects, function( projectConfig, projectName ) {
+				return project.create( projectName, projectConfig, repoInfo );
+			} );
+		}
 	}
 	return [];
 }
