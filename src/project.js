@@ -4,7 +4,7 @@ var when = require( 'when' );
 var Monologue = require( 'monologue.js' )( _ );
 var createRunner = require( './stepRunner.js' );
 var debug = require( 'debug' )( 'project' );
-var packager = require( 'continua-pack' );
+var packager = require( 'nonstop-pack' );
 
 function createProjectMachine( name, config, repInfo ) {
 	var Machine = machina.Fsm.extend( {

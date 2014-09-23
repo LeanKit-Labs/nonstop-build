@@ -11,6 +11,17 @@ nonstop builds each project based on a set of user defined and implemented steps
 ## API
 While there are several modules in this library, consumers will only interact with one method:
 
+### hasBuildFile( workingDirectory )
+Returns a promise that will resolve to true or false to indicate whether or not a build file was found in the workingDirectory (usually the top-level folder in the git repository).
+
+```javascript
+// workingDirectory can either be a path to the repository or metadata about it
+build.hasBuildFile( '/path/to/repo' )
+  .then( function( result ) {
+    // result will be true or false, there is no need to check for a rejection
+  } );
+```
+
 ### start( repository, [projectName] )
 Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a projectName to limit the build to a specific project.
 

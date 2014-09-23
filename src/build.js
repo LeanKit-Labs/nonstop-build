@@ -6,8 +6,7 @@ var project;
 
 function build( repoInfo, projectName ) {
 	return when.promise( function( resolve, reject ) {
-
-		when.try( createProjects, buildFile.get( repoInfo.path ), repoInfo, projectName )
+		when.try( createProjects, buildFile.get( repoInfo.path || repoInfo ), repoInfo, projectName )
 			.then( function( projects ) {
 				if( _.isEmpty( projects ) ) {
 					resolve( {} );
@@ -48,6 +47,15 @@ function getPlatforms( config ) {
 module.exports = function() {
 	project = require( './project.js' )();
 	return {
+		hasBuildFile: function( repoInfo ) {
+			return buildFile.get( repoInfo.path || repoInfo )
+				.then( function() {
+					return true;
+				} )
+				.then( null, function() {
+					return false;
+				} );
+		},
 		start: build
 	};
 };
