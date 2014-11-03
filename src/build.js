@@ -4,7 +4,11 @@ var buildFile = require( './buildFile.js' );
 var sysInfo = require( './sysInfo.js' )();
 var project;
 
-function build( repoInfo, projectName ) {
+function build( repoInfo, projectName, noPack ) {
+	if( _.isBoolean( projectName ) ) {
+		noPack = projectName;
+	}
+
 	return when.promise( function( resolve, reject ) {
 		when.try( createProjects, buildFile.get( repoInfo.path || repoInfo ), repoInfo, projectName )
 			.then( function( projects ) {
@@ -12,13 +16,16 @@ function build( repoInfo, projectName ) {
 					resolve( {} );
 				} else {
 					when.all( _.map( projects, function( project ) {
-							return project.build();
+							return project.build( noPack );
 						} ) )
 					.then( function( status ) {
 						resolve( status );
 					} )
 					.then( null, reject );
 				}
+			} )
+			.then( null, function( err ) {
+				reject( err );
 			} );
 	} );
 }
@@ -52,8 +59,12 @@ module.exports = function() {
 				.then( function() {
 					return true;
 				} )
-				.then( null, function() {
-					return false;
+				.then( null, function( err ) {
+					if( err.badPath ) {
+						throw err;
+					} else {
+						return false;
+					}
 				} );
 		},
 		start: build
