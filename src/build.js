@@ -67,6 +67,9 @@ module.exports = function() {
 					}
 				} );
 		},
+		saveFile: function( file, info, format ) {
+			return buildFile.save( file, info, format );
+		},
 		start: build
 	};
 };
