@@ -2,9 +2,11 @@ var _ = require( 'lodash' );
 var machina = require( 'machina' );
 var when = require( 'when' );
 var Monologue = require( 'monologue.js' )( _ );
-var createRunner = require( './stepRunner.js' );
-var debug = require( 'debug' )( 'project' );
+var drudgeon = require( 'drudgeon' );
+var debug = require( 'debug' )( 'nonstop:project' );
 var packager = require( 'nonstop-pack' );
+var path = require( 'path' );
+var platform = require( 'os' ).platform();
 
 function createProjectMachine( name, config, repInfo ) {
 	var Machine = machina.Fsm.extend( {
@@ -23,8 +25,9 @@ function createProjectMachine( name, config, repInfo ) {
 		},
 
 		_build: function() {
-			this.project = createRunner( config, repInfo.path ? repInfo.path : repInfo );
-			this._promise( 'build', this.project.build );
+			var basePath = path.join( ( repInfo.path ? repInfo.path : repInfo ), config.path );
+			this.project = drudgeon( config.steps, basePath );
+			this._promise( 'build', this.project.run );			
 		},
 
 		_getPackageInfo: function() {
