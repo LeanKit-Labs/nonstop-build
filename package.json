@@ -29,7 +29,7 @@
   "dependencies": {
     "configya": "~0.1.0",
     "debug": "^2.0.0",
-    "drudgeon": "^0.1.0",
+    "drudgeon": "~0.1.0",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",
     "machina": "^0.4.0-1",
