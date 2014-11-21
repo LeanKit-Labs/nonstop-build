@@ -11,8 +11,22 @@ nonstop builds each project based on a set of user defined and implemented steps
 ## API
 While there are several modules in this library, consumers will only interact with one method:
 
-### start( repository, [projectName] )
-Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a projectName to limit the build to a specific project.
+### hasBuildFile( workingDirectory )
+Returns a promise that will resolve to true or false to indicate whether or not a build file was found in the workingDirectory (usually the top-level folder in the git repository). If the working directory is invalid, an error will be thrown instead which you can detect by using a `.catch()`.
+
+```javascript
+// workingDirectory can either be a path to the repository or metadata about it
+build.hasBuildFile( '/path/to/repo' )
+  .then( function( result ) {
+    // result will be true if the file exists, false if it is missing or invalid
+  } )
+  .catch( function( err ) {
+    // this callback is invoked if the working path is invalid
+  } );
+```
+
+### start( repository, [projectName], [skipPacking] )
+Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a `projectName` to limit the build to a specific project. You can also provide an optional `true` argument to cause this to skip the packaging step. (primarily for use in testing build via the cli)
 
 ```javascript
 // repository - either the path to the git repository or metadata about the repository

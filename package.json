@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-2",
+  "version": "0.1.0-7",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {
@@ -29,13 +29,14 @@
   "dependencies": {
     "commander": "^2.3.0",
     "configya": "~0.1.0",
-    "nonstop-pack": "~0.1.0",
     "debug": "^2.0.0",
     "inquirer": "^0.7.1",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",
     "machina": "^0.4.0-1",
+    "map-stream": "0.0.5",
     "monologue.js": "<0.2.0",
+    "nonstop-pack": "~0.1.0",
     "vinyl-fs": "^0.3.7",
     "when": "^3.4.5",
     "win-spawn": "git://github.com/arobson/win-spawn"

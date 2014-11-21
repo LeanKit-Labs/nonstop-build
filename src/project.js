@@ -4,7 +4,7 @@ var when = require( 'when' );
 var Monologue = require( 'monologue.js' )( _ );
 var createRunner = require( './stepRunner.js' );
 var debug = require( 'debug' )( 'project' );
-var packager = require( 'continua-pack' );
+var packager = require( 'nonstop-pack' );
 
 function createProjectMachine( name, config, repInfo ) {
 	var Machine = machina.Fsm.extend( {
@@ -48,7 +48,8 @@ function createProjectMachine( name, config, repInfo ) {
 			this._promise( 'upload', packager.upload, packageInfo );
 		},
 
-		build: function() {
+		build: function( noPack ) {
+			this.noPack = noPack;
 			return when.promise( function( resolve, reject, notify ) {
 				var eventSubscription = this.on( 'build.data', function( line ) {
 					debug( '\t %s', line.data.replace( '\n', '' ) );
@@ -90,7 +91,7 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'build-done': function() {
 					debug( 'build completed for %s %s', name, this.version );
-					this.transition( 'packaging' );
+					this.transition( this.noPack ? 'done' : 'packaging' );
 				},
 				'build-failed': function( err ) {
 					debug( 'build failed for %s %s with %s', name, this.version, err.stack );
@@ -103,11 +104,16 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'package-done': function( packageInfo ) {
 					debug( 'packaging for %s %s completed', name, this.version );
-					this.emit( 'project.done', packageInfo );
+					this.transition( 'done' );
 				},
 				'package-failed': function( err ) {
 					debug( 'packaging for %s %s failed with %s', name, this.version, err.stack );
 					this.emit( 'project.failed', { step: 'pack', error: err } );
+				}
+			},
+			done: {
+				_onEnter: function() {
+					this.emit( 'project.done', this.packageInfo );
 				}
 			}
 		}

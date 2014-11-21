@@ -4,22 +4,28 @@ var buildFile = require( './buildFile.js' );
 var sysInfo = require( './sysInfo.js' )();
 var project;
 
-function build( repoInfo, projectName ) {
-	return when.promise( function( resolve, reject ) {
+function build( repoInfo, projectName, noPack ) {
+	if( _.isBoolean( projectName ) ) {
+		noPack = projectName;
+	}
 
-		when.try( createProjects, buildFile.get( repoInfo.path ), repoInfo, projectName )
+	return when.promise( function( resolve, reject ) {
+		when.try( createProjects, buildFile.get( repoInfo.path || repoInfo ), repoInfo, projectName )
 			.then( function( projects ) {
 				if( _.isEmpty( projects ) ) {
 					resolve( {} );
 				} else {
 					when.all( _.map( projects, function( project ) {
-							return project.build();
+							return project.build( noPack );
 						} ) )
 					.then( function( status ) {
 						resolve( status );
 					} )
 					.then( null, reject );
 				}
+			} )
+			.then( null, function( err ) {
+				reject( err );
 			} );
 	} );
 }
@@ -48,6 +54,22 @@ function getPlatforms( config ) {
 module.exports = function() {
 	project = require( './project.js' )();
 	return {
+		hasBuildFile: function( repoInfo ) {
+			return buildFile.get( repoInfo.path || repoInfo )
+				.then( function() {
+					return true;
+				} )
+				.then( null, function( err ) {
+					if( err.badPath ) {
+						throw err;
+					} else {
+						return false;
+					}
+				} );
+		},
+		saveFile: function( file, info, format ) {
+			return buildFile.save( file, info, format );
+		},
 		start: build
 	};
 };
