@@ -70,7 +70,7 @@ describe( 'when creating build with no package for a project', function() {
 	var packageInfo;
 
 	before( function( done ) {
-		this.timeout( 10000 );
+		this.timeout( 1000 );
 		var projectConfig = {
 			path: './',
 			steps: {
@@ -90,7 +90,8 @@ describe( 'when creating build with no package for a project', function() {
 			commit: '',
 			path: './spec/testProject'
 		};
-		project.create( 'project1', projectConfig, repoInfo )
+		var p = project.create( 'project1', projectConfig, repoInfo );
+		p
 			.build( true )
 			.then( function( info ) {
 				packageInfo = info;

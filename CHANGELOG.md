@@ -1,5 +1,8 @@
 ## 0.1.0
 
+### prerelease 8
+ * Pull out step runner into a new library - [drudgeon](https://github.com/LeanKit-Labs/drudgeon)
+
 ### prerelease 7
  * Improve how build files get searched for. Consult you a [Doug Neiner](https://github.com/dcneiner) for great good! 
  * Add ability to persist build data as JSON or YAML formatted file.

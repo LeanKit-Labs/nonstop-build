@@ -1,0 +1,37 @@
+{
+  "platforms": {
+    "darwin": {
+      "architectures": [
+        "x86",
+        "x64"
+      ]
+    },
+    "win32": {
+      "architectures": [
+        "x86",
+        "x64"
+      ]
+    },
+    "linux": {
+      "architectures": [
+        "x86",
+        "x64"
+      ]
+    }
+  },
+  "projects": {
+    "bild": {
+      "path": "./",
+      "steps": {
+        "gulp": {
+          "command": "gulp",
+          "path": "./",
+          "arguments": [ "test" ]
+        }
+      },
+      "pack": {
+        "pattern": [ "./src/*.js", "./node_modules/**/*" ]
+      }
+    }
+  }
+}
