@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-8",
+  "version": "0.1.0-9",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {
@@ -30,13 +30,13 @@
     "configya": "~0.1.0",
     "debug": "^2.0.0",
     "drudgeon": "~0.1.0",
+    "globulesce": "^0.1.3",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",
     "machina": "^0.4.0-1",
     "map-stream": "0.0.5",
     "monologue.js": "^0.1.4",
     "nonstop-pack": "~0.1.0",
-    "vinyl-fs": "^0.3.7",
     "when": "^3.4.5"
   }
 }

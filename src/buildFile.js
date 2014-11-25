@@ -1,39 +1,34 @@
+var _ = require( 'lodash' );
 var yaml = require( 'js-yaml' );
 var when = require( 'when' );
-var vinyl = require( 'vinyl-fs' );
-var map = require( 'map-stream' );
+var glob = require( 'globulesce' );
 var path = require( 'path' );
 var fs = require( 'fs' );
 
 function getBuildFile( repositoryPath ) {
-	return when.promise( function( resolve, reject ) {
-		var hadFiles = false;
-		vinyl.src( 
-				[ '{**,.}/*nonstop.{json,yaml}' ],
-				{ cwd: repositoryPath, dot: true }
-			).pipe( map( function( f, cb ) {
-				hadFiles = true;
-				var ext = path.extname( f.path );
-				try {
-					if( ext === '.json' ) {
-						resolve( parseJson( f.contents ) );
-					} else {
-						resolve( parseYaml( f.contents ) );
+	if( fs.existsSync( repositoryPath ) ) {
+		return glob( repositoryPath, '{**,.}/*nonstop.{json,yaml}' )
+			.then( function( matches ) {
+				if( _.isEmpty( matches ) ) {
+					return when.reject( new Error( 'No nonstop json or yaml file was found in path ' + repositoryPath ) );
+				} else {
+					try {
+						var file = matches[ 0 ];
+						var content = fs.readFileSync( file );
+						var ext = path.extname( file );
+						if( ext === '.json' ) {
+							return parseJson( content );
+						} else {
+							return parseYaml( content );
+						}
+					} catch ( e ) {
+						return when.reject( new Error( 'Failed to load a nonstop configuration file with ' + e ) );
 					}
-				} catch( err ) {
-					reject( new Error( 'Failed to load a nonstop configuration file with ' + err ) );
 				}
-				cb( null, f );
-			} ) )
-			.on( 'end', function() {
-				if( !hadFiles ) {
-					reject( new Error( 'No nonstop json or yaml file was found in path ' + repositoryPath ) );
-				}
-			} )
-			.on( 'error', function( e ) {
-				reject( new Error( 'Failed to load a nonstop configuration file with ' + e.stack ) );
 			} );
-	} );
+	} else {
+		return when.reject( new Error( 'No nonstop json or yaml file was found in path ' + repositoryPath ) );
+	}
 }
 
 function parseYaml( content ) {

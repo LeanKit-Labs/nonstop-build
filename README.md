@@ -171,7 +171,6 @@ projects:
 ## Dependencies
 This would not have been possible without several great Node modules:
 
- * vinyl-fs <- this is __awesome__
  * commander
  * inquirer
  * machina
@@ -181,7 +180,7 @@ This would not have been possible without several great Node modules:
  * lodash
  * js-yaml
  * debug
-
+ * globulesce
  * nonstop-pack
 
 ## Dependents
