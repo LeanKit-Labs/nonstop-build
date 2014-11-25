@@ -52,7 +52,7 @@ function createProjectMachine( name, config, repInfo ) {
 		},
 
 		build: function( noPack ) {
-			this.noPack = noPack;
+			this.noPack = noPack || !( config.pack && config.pack.pattern );
 			return when.promise( function( resolve, reject, notify ) {
 				var eventSubscription = this.on( 'build.data', function( line ) {
 					debug( '\t %s', line.data.replace( '\n', '' ) );

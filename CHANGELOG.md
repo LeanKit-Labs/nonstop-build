@@ -1,9 +1,8 @@
 ## 0.1.0
 
-### prerelease 9
-Remove vinyl in favor of globulesce (a faster way to search for build files).
-
-### prerelease 8
+### prerelease 10
+ * Skip packing step when configuration is missing
+ * Remove vinyl in favor of globulesce (a faster way to search for build files).
  * Pull out step runner into a new library - [drudgeon](https://github.com/LeanKit-Labs/drudgeon)
 
 ### prerelease 7
