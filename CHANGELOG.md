@@ -1,5 +1,9 @@
 ## 0.1.0
 
+### prerelease 14
+ * Clean up error messages
+ * Build all projects despite individual failures.
+
 ### prerelease 12
  * Bug fixes around handling exceptions
  * Better test coverage and addition of istanbul to gulpfile

@@ -2,6 +2,7 @@ var should = require( 'should' );
 var sinon = require( 'sinon' );
 var when = require( 'when' );
 var buildFn = require( '../src/build.js' );
+var _ = require( 'lodash' );
 
 describe( 'Build', function() {
 	var result;
@@ -87,7 +88,7 @@ describe( 'Build', function() {
 		} );
 
 		it( 'should result in project status', function() {
-			result.should.eql( [ { fake: true } ] );
+			result.should.eql( [ { state: 'fulfilled', value: { fake: true } } ] );
 		} );
 
 		after( function() {
@@ -95,7 +96,7 @@ describe( 'Build', function() {
 		} );
 	} );
 
-		describe( 'with multiple projects file', function() {
+	describe( 'with multiple projects file', function() {
 		before( function( done ) {
 			setup();
 
@@ -122,10 +123,63 @@ describe( 'Build', function() {
 		} );
 
 		it( 'should result in project status', function() {
-			result.should.eql( [ { fake: true }, { fake: true } ] );
+			result.should.eql( [ 
+				{ state: 'fulfilled', value: { fake: true } },
+				{ state: 'fulfilled', value: { fake: true } }
+			] );
 		} );
 
 		after( function() {
+			reset();
+		} );
+	} );
+
+	describe( 'when a project fails', function() {
+		var failingProject = { build: function() {} };
+		var failingProjectMock;
+
+		before( function( done ) {
+			setup();
+
+			var repoInfo = './';
+
+			buildFileMock.expects( 'get' )
+				.withArgs( repoInfo )
+				.returns( { platforms: { 'darwin': { architecture: [ 'x64' ] } }, projects: { test1: {}, test2: {} } } );
+
+			projectMock.expects( 'build' )
+				.withArgs( undefined )
+				.returns( when( { fake: true } ) );
+
+			failingProjectMock = sinon.mock( failingProject );
+			failingProjectMock.expects( 'build' )
+				.withArgs( undefined )
+				.returns( when.reject( new Error( 'project has a sad' ) ) );
+
+			projectFnMock
+				.expects( 'create' )
+				.twice()
+				.onCall( 0 )
+				.returns( failingProject )
+				.onCall( 1 )
+				.returns( project );
+
+			build.start( repoInfo )
+				.then( function( status ) {
+					result = status;
+					done();
+				} );
+		} );
+
+		it( 'should result in project status', function() {
+			result.should.eql( [
+				{ state: 'fulfilled', value: { failed: true, error: 'project has a sad', name: undefined } },
+				{ state: 'fulfilled', value: { fake: true }  }				 
+			] );
+		} );
+
+		after( function() {
+			failingProjectMock.restore();
 			reset();
 		} );
 	} );

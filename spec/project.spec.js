@@ -166,7 +166,7 @@ describe( 'Project', function() {
 		} );
 
 		it( 'should report problem', function() {
-			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step packageInfo failed with error: Error: Cannot search for version files in bad path "/git/labs/nonstop/nonstop-build/spec/murhurhurhur"' );
+			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "packageInfo" failed: Cannot search for version files in bad path "/git/labs/nonstop/nonstop-build/spec/murhurhurhur"' );
 		} );
 
 		it( 'should not have produced output', function() {
@@ -208,7 +208,7 @@ describe( 'Project', function() {
 		} );
 
 		it( 'should report problem', function() {
-			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step pack failed with error: Error: No files matched the pattern "./lol/**" in path "/git/labs/nonstop/nonstop-build/spec/testProject". No package was generated.' );
+			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "pack" failed: No files matched the pattern "./lol/**" in path "/git/labs/nonstop/nonstop-build/spec/testProject". No package was generated.' );
 		} );
 
 		it( 'should not have produced output', function() {
@@ -247,7 +247,7 @@ describe( 'Project', function() {
 		} );
 
 		it( 'should report problem', function() {
-			error.toString().should.equal( 'Error: Step build failed with error: ls: derp: No such file or directory\n' );
+			error.toString().should.equal( 'Error: Step "build" failed: ls: derp: No such file or directory\n' );
 		} );
 
 		it( 'should not have produced output', function() {

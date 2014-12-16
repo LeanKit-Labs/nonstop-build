@@ -13,8 +13,10 @@ function build( projectFn, buildFile, repoInfo, projectName, noPack ) {
 				if( _.isEmpty( projects ) ) {
 					resolve( {} );
 				} else {
-					when.all( _.map( projects, function( project ) {
-							return project.build( noPack );
+					when.settle( _.map( projects, function( project ) {
+							return project.build( noPack ).then( null, function( err ) {
+								return { failed: true, name: project.name, error: err.toString().replace( 'Error: ', '' ) };
+							} );
 						} ) )
 					.then( function( status ) {
 						resolve( status );

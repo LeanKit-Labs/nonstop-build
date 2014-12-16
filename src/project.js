@@ -66,7 +66,7 @@ function createProjectMachine( name, config, repInfo ) {
 				this.on( 'project.failed', function( err ) {
 					eventSubscription.unsubscribe();
 					var stack = err.error ? ( err.error.stack || err.error ) : 'no error provided';
-					reject( new Error( 'Step ' + err.step + ' failed with error: ' + stack ) );
+					reject( new Error( 'Step "' + err.step + '" failed: ' + stack ) );
 				}.bind( this ) ).once();
 				this.transition( 'initializing' );
 			}.bind( this ) );
@@ -85,7 +85,7 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'packageInfo-failed': function( err ) {
 					debug( 'failed to attain package info for %s %s', name, this.version );
-					this.emit( 'project.failed', { step: 'packageInfo', error: err } );
+					this.emit( 'project.failed', { step: 'packageInfo', error: err.toString().replace( 'Error: ', '' ) } );
 				},
 			},
 			'building': {
@@ -114,7 +114,7 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'package-failed': function( err ) {
 					debug( 'packaging for %s %s failed with %s', name, this.version, err.stack );
-					this.emit( 'project.failed', { step: 'pack', error: err } );
+					this.emit( 'project.failed', { step: 'pack', error: err.toString().replace( 'Error: ', '' ) } );
 				}
 			},
 			done: {
