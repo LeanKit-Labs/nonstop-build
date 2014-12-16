@@ -27,7 +27,7 @@ function getBuildFile( repositoryPath ) {
 				}
 			} );
 	} else {
-		return when.reject( new Error( 'No nonstop json or yaml file was found in path ' + repositoryPath ) );
+		return when.reject( new Error( 'No nonstop build file could be loaded from bad path: ' + repositoryPath ) );
 	}
 }
 

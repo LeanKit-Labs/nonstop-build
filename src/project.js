@@ -27,7 +27,7 @@ function createProjectMachine( name, config, repInfo ) {
 		_build: function() {
 			var basePath = path.join( ( repInfo.path ? repInfo.path : repInfo ), config.path );
 			this.project = drudgeon( config.steps, basePath );
-			this._promise( 'build', this.project.run );			
+			this._promise( 'build', this.project.run );
 		},
 
 		_getPackageInfo: function() {
@@ -44,7 +44,8 @@ function createProjectMachine( name, config, repInfo ) {
 			promise.apply( null, args )
 				.progress( handles.progress )
 				.then( handles.success )
-				.then( null, handles.failure );
+				.then( null, handles.failure )
+				.catch( handles.failure );
 		},
 
 		_upload: function( packageInfo ) {
@@ -65,8 +66,7 @@ function createProjectMachine( name, config, repInfo ) {
 				this.on( 'project.failed', function( err ) {
 					eventSubscription.unsubscribe();
 					var stack = err.error ? ( err.error.stack || err.error ) : 'no error provided';
-					var error = new Error( 'Step ' + err.step + ' failed with error: ' + stack );
-					reject( error );
+					reject( new Error( 'Step ' + err.step + ' failed with error: ' + stack ) );
 				}.bind( this ) ).once();
 				this.transition( 'initializing' );
 			}.bind( this ) );
@@ -97,7 +97,10 @@ function createProjectMachine( name, config, repInfo ) {
 					this.transition( this.noPack ? 'done' : 'packaging' );
 				},
 				'build-failed': function( err ) {
-					debug( 'build failed for %s %s with %s', name, this.version, err.stack );
+					if( err.failedStep ) {
+						err = err[ err.failedStep ].join( '\n' ) || 'build step "' + err.failedStep + '" exited with a non-zero code';
+					}
+					debug( 'build failed for %s %s with %s', name, this.version, err.stack ? err.stack : err );
 					this.emit( 'project.failed', { step: 'build', error: err } );
 				}
 			},

@@ -1,16 +1,14 @@
 var _ = require( 'lodash' );
 var when = require( 'when' );
-var buildFile = require( './buildFile.js' );
 var sysInfo = require( './sysInfo.js' )();
-var project;
 
-function build( repoInfo, projectName, noPack ) {
+function build( projectFn, buildFile, repoInfo, projectName, noPack ) {
 	if( _.isBoolean( projectName ) ) {
 		noPack = projectName;
 	}
 
 	return when.promise( function( resolve, reject ) {
-		when.try( createProjects, buildFile.get( repoInfo.path || repoInfo ), repoInfo, projectName )
+		when.try( createProjects, projectFn, buildFile.get( repoInfo.path || repoInfo ), repoInfo, projectName )
 			.then( function( projects ) {
 				if( _.isEmpty( projects ) ) {
 					resolve( {} );
@@ -30,10 +28,10 @@ function build( repoInfo, projectName, noPack ) {
 	} );
 }
 
-function createProjects( config, repoInfo, projectName ) {
+function createProjects( project, config, repoInfo, projectName ) {
 	var platforms = getPlatforms( config );
 	if( _.contains( platforms, sysInfo.platform ) ) {
-		if( projectName ) {
+		if( projectName && config.projects[ projectName ] ) {
 			return [ project.create( projectName, config.projects[ projectName ] ) ];
 		} else {
 			return _.map( config.projects, function( projectConfig, projectName ) {
@@ -44,15 +42,14 @@ function createProjects( config, repoInfo, projectName ) {
 	return [];
 }
 
-function getPlatforms( config ) {
+function getPlatforms( config ) { // jshint ignore : line
 	if( !config.platforms ) {
 		return [ 'darwin', 'linux', 'win32' ];
 	}
 	return _.keys( config.platforms );
 }
 
-module.exports = function() {
-	project = require( './project.js' )();
+module.exports = function( buildFile, project ) {
 	return {
 		hasBuildFile: function( repoInfo ) {
 			return buildFile.get( repoInfo.path || repoInfo )
@@ -70,6 +67,6 @@ module.exports = function() {
 		saveFile: function( file, info, format ) {
 			return buildFile.save( file, info, format );
 		},
-		start: build
+		start: build.bind( undefined, project, buildFile )
 	};
 };
