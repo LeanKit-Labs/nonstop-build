@@ -1,6 +1,6 @@
 ## 0.1.0
 
-### prerelease 11
+### prerelease 12
  * Bug fixes around handling exceptions
  * Better test coverage and addition of istanbul to gulpfile
 

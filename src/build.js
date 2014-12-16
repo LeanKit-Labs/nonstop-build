@@ -50,6 +50,8 @@ function getPlatforms( config ) { // jshint ignore : line
 }
 
 module.exports = function( buildFile, project ) {
+	buildFile = buildFile || require( './buildFile.js' );
+	project = project || require( './project.js' )();
 	return {
 		hasBuildFile: function( repoInfo ) {
 			return buildFile.get( repoInfo.path || repoInfo )
