@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-14",
+  "version": "0.1.0-15",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {

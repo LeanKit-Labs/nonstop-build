@@ -72,6 +72,10 @@ function createProjectMachine( name, config, repInfo ) {
 			}.bind( this ) );
 		},
 
+		intialize: function() {
+			this.name = name;
+		},
+
 		states: {
 			'initializing': {
 				_onEnter: function() {

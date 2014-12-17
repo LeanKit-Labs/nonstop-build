@@ -1,8 +1,9 @@
 ## 0.1.0
 
-### prerelease 14
+### prerelease 15
  * Clean up error messages
- * Build all projects despite individual failures.
+ * Add name to project during initialization
+ * Build all projects despite individual failures
 
 ### prerelease 12
  * Bug fixes around handling exceptions
