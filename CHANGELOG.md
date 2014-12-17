@@ -1,6 +1,6 @@
 ## 0.1.0
 
-### prerelease 15
+### prerelease 16
  * Clean up error messages
  * Add name to project during initialization
  * Build all projects despite individual failures
