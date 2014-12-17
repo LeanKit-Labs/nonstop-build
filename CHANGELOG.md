@@ -1,6 +1,7 @@
 ## 0.1.0
 
-### prerelease 16
+### prerelease 17
+ * Bug fix - repo path not passed when building specific project
  * Clean up error messages
  * Add name to project during initialization
  * Build all projects despite individual failures

@@ -150,7 +150,7 @@ describe( 'Build', function() {
 				.returns( when( { fake: true } ) );
 
 			projectFnMock.expects( 'create' )
-				.twice()
+				.withArgs( 'test1', {}, './' )
 				.returns( project );
 
 			build.start( repoInfo, 'test1' )

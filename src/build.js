@@ -34,7 +34,7 @@ function createProjects( project, config, repoInfo, projectName ) {
 	var platforms = getPlatforms( config );
 	if( _.contains( platforms, sysInfo.platform ) ) {
 		if( projectName && config.projects[ projectName ] ) {
-			return [ project.create( projectName, config.projects[ projectName ] ) ];
+			return [ project.create( projectName, config.projects[ projectName ], repoInfo ) ];
 		} else {
 			return _.map( config.projects, function( projectConfig, projectName ) {
 				return project.create( projectName, projectConfig, repoInfo );
