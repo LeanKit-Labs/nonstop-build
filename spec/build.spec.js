@@ -134,6 +134,43 @@ describe( 'Build', function() {
 		} );
 	} );
 
+	describe( 'with a selected project', function() {
+		before( function( done ) {
+			setup();
+
+			var repoInfo = './';
+
+			buildFileMock.expects( 'get' )
+				.withArgs( repoInfo )
+				.returns( { platforms: { 'darwin': { architecture: [ 'x64' ] } }, projects: { test1: {}, test2: {} } } );
+
+			projectMock.expects( 'build' )
+				.withArgs( undefined )
+				.twice()
+				.returns( when( { fake: true } ) );
+
+			projectFnMock.expects( 'create' )
+				.twice()
+				.returns( project );
+
+			build.start( repoInfo, 'test1' )
+				.then( function( status ) {
+					result = status;
+					done();
+				} );
+		} );
+
+		it( 'should result in a single project status', function() {
+			result.should.eql( [ 
+				{ state: 'fulfilled', value: { fake: true } }
+			] );
+		} );
+
+		after( function() {
+			reset();
+		} );
+	} );
+
 	describe( 'when a project fails', function() {
 		var failingProject = { build: function() {} };
 		var failingProjectMock;
