@@ -4,7 +4,7 @@ Library for producing packages from nonstop build files.
 ## Approach
 Nonstop supports 1 or more projects per repository. The build file should specify all projects, their build steps and other metadata that nonstop will use to create the package.
 
-nonstop builds each project based on a set of user defined and implemented steps. Steps are executed via the shell in order. This approach will support _any_ language and works well with other build tools. The only requirement is that if a build step fails, it should exit with a code other than 0. 
+nonstop builds each project based on a set of user defined and implemented steps. Steps are executed via the shell in order. This approach will support _any_ language and works well with other build tools. The only requirement is that if a build step fails, it should exit with a code other than 0.
 
   Note: build tools that fail with an exit code of 0 are bad and should feel bad.
 
@@ -61,7 +61,7 @@ architectures:
 
 ### Project
 Each project can contain the following metadata:
-  
+
   * path - working path
   * versionFile - (optional) specify the path to the file containing the project's version
   * steps - the build steps to execute
@@ -77,7 +77,7 @@ If you follow common conventions, nonstop __should__ be able to locate the file 
 > __!IMPORTANT!__ - you must keep the name and location of the version file consistent throughout the entire life of the repository. Changing this will break nonstop's ability to read the version for each commit and determine the version history.
 
 #### Steps
-Each build step is a set of parameters that nonstop will use to execute the step in the shell. 
+Each build step is a set of parameters that nonstop will use to execute the step in the shell.
 
  * path - the path (relative to the project's path) where the command should be executed
  * command - the command to issue
@@ -141,7 +141,7 @@ In this example, the build is only valid on 64 bit darwin or linux OSs. There is
 ```yaml
 ---
 platforms:
-  darwin: 
+  darwin:
     architecture:
       - 'x64'
   linux:
@@ -161,7 +161,7 @@ projects:
         command: 'gulp'
         arguments:
           - 'test'
-    pack: 
+    pack:
       pattern: './node_modules/**,./src/**'
     reports:
       plato: './plato'
@@ -169,19 +169,16 @@ projects:
 ```
 
 ## Dependencies
-This would not have been possible without several great Node modules:
 
- * commander
- * inquirer
- * machina
- * monologue
- * win-spawn (forked version)
  * when
  * lodash
- * js-yaml
- * debug
+ * machina
+ * monologue
+ * drudgeon
  * globulesce
  * nonstop-pack
+ * js-yaml
+ * debug
 
 ## Dependents
 The following nonstop projects rely on this library:

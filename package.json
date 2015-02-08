@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-17",
+  "version": "0.1.0-18",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {
@@ -32,14 +32,14 @@
   "dependencies": {
     "configya": "~0.1.0",
     "debug": "^2.0.0",
-    "drudgeon": "~0.1.0",
+    "drudgeon": "~0.1.6",
     "globulesce": "^0.1.4",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",
     "machina": "^0.4.0-1",
     "map-stream": "0.0.5",
     "monologue.js": "^0.1.4",
-    "nonstop-pack": "~0.1.0",
+    "nonstop-pack": "~0.1.0-15",
     "when": "^3.4.5"
   }
 }

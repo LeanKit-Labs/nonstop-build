@@ -1,5 +1,9 @@
 ## 0.1.0
 
+### prerelease 18
+ * Update dependencies
+ * Print current build step to console
+
 ### prerelease 17
  * Bug fix - repo path not passed when building specific project
  * Clean up error messages
@@ -16,7 +20,7 @@
  * Pull out step runner into a new library - [drudgeon](https://github.com/LeanKit-Labs/drudgeon)
 
 ### prerelease 7
- * Improve how build files get searched for. Consult you a [Doug Neiner](https://github.com/dcneiner) for great good! 
+ * Improve how build files get searched for. Consult you a [Doug Neiner](https://github.com/dcneiner) for great good!
  * Add ability to persist build data as JSON or YAML formatted file.
 
 ### prerelease 6

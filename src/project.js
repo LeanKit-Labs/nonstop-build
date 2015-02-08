@@ -6,7 +6,6 @@ var drudgeon = require( 'drudgeon' );
 var debug = require( 'debug' )( 'nonstop:project' );
 var packager = require( 'nonstop-pack' );
 var path = require( 'path' );
-var platform = require( 'os' ).platform();
 
 function createProjectMachine( name, config, repInfo ) {
 	var Machine = machina.Fsm.extend( {
@@ -18,7 +17,9 @@ function createProjectMachine( name, config, repInfo ) {
 
 		_handlers: function( op ) {
 			return {
-				progress: function( data ) { this.emit( op + '.data', data ); }.bind( this ),
+				progress: function( data ) {
+					this.emit( op + '.data', data );
+				}.bind( this ),
 				success: this._handler( op + '-done' ),
 				failure: this._handler( op + '-failed' )
 			};
@@ -27,6 +28,9 @@ function createProjectMachine( name, config, repInfo ) {
 		_build: function() {
 			var basePath = path.join( ( repInfo.path ? repInfo.path : repInfo ), config.path );
 			this.project = drudgeon( config.steps, basePath );
+			this.project.on( 'starting.#', function( stepName ) {
+				console.log( 'Starting \'' + stepName + '\'' );
+			} );
 			this._promise( 'build', this.project.run );
 		},
 
@@ -101,7 +105,7 @@ function createProjectMachine( name, config, repInfo ) {
 					this.transition( this.noPack ? 'done' : 'packaging' );
 				},
 				'build-failed': function( err ) {
-					if( err.failedStep ) {
+					if ( err.failedStep ) {
 						err = err[ err.failedStep ].join( '\n' ) || 'build step "' + err.failedStep + '" exited with a non-zero code';
 					}
 					debug( 'build failed for %s %s with %s', name, this.version, err.stack ? err.stack : err );
