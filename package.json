@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-18",
+  "version": "0.1.0",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {
@@ -15,8 +15,17 @@
     "ci",
     "build"
   ],
-  "author": "Alex Robson",
-  "license": "MIT License",
+  "author": "LeanKit",
+  "contributors": [
+    {
+      "name": "Alex Robson",
+      "url": "http://nerdventure.io"
+    }
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/LeanKit-Labs/nonstop-build/issues"
   },
@@ -30,9 +39,9 @@
     "sinon": "^1.12.2"
   },
   "dependencies": {
-    "configya": "~0.1.0",
+    "configya": "~0.2.1",
     "debug": "^2.0.0",
-    "drudgeon": "~0.1.6",
+    "drudgeon": "~0.2.0",
     "globulesce": "^0.1.4",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",

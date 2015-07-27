@@ -9,6 +9,7 @@
     "machina": "^0.4.0-1",
     "monologue.js": "<0.2.0"
   },
+  "license": "MIT",
   "devDependencies": {
   }
 }

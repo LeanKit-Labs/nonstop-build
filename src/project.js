@@ -7,7 +7,7 @@ var debug = require( 'debug' )( 'nonstop:project' );
 var packager = require( 'nonstop-pack' );
 var path = require( 'path' );
 
-function createProjectMachine( name, config, repInfo ) {
+function createProjectMachine( name, config, repInfo, verbose ) {
 	var Machine = machina.Fsm.extend( {
 		_handler: function( ev ) {
 			return function( result ) {
@@ -16,20 +16,22 @@ function createProjectMachine( name, config, repInfo ) {
 		},
 
 		_handlers: function( op ) {
+			var context = this;
 			return {
 				progress: function( data ) {
 					this.emit( op + '.data', data );
-				}.bind( this ),
-				success: this._handler( op + '-done' ),
-				failure: this._handler( op + '-failed' )
+				}.bind( context ),
+				success: context._handler( op + '-done' ),
+				failure: context._handler( op + '-failed' )
 			};
 		},
 
 		_build: function() {
 			var basePath = path.join( ( repInfo.path ? repInfo.path : repInfo ), config.path );
-			this.project = drudgeon( config.steps, basePath );
+			this.project = drudgeon( config.steps, { relativePath: basePath, inheritIO: verbose } );
 			this.project.on( 'starting.#', function( stepName ) {
-				console.log( 'Starting \'' + stepName + '\'' );
+				// console.log( 'Starting \'' + stepName + '\'' );
+				this.emit( 'build.data', { step: stepName } );
 			} );
 			this._promise( 'build', this.project.run );
 		},
@@ -60,8 +62,10 @@ function createProjectMachine( name, config, repInfo ) {
 			this.noPack = noPack || !( config.pack && config.pack.pattern );
 			return when.promise( function( resolve, reject, notify ) {
 				var eventSubscription = this.on( 'build.data', function( line ) {
-					debug( '\t %s', line.data.replace( '\n', '' ) );
-					notify( line );
+					debug( '\t %s', line.data ? line.data.replace( '\n', '' ) : line );
+					if ( notify ) {
+						notify( line );
+					}
 				}.bind( this ) );
 				this.on( 'project.done', function( packageInfo ) {
 					eventSubscription.unsubscribe();

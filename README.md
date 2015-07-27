@@ -25,8 +25,8 @@ build.hasBuildFile( '/path/to/repo' )
   } );
 ```
 
-### start( repository, [projectName], [skipPacking] )
-Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a `projectName` to limit the build to a specific project. You can also provide an optional `true` argument to cause this to skip the packaging step. (primarily for use in testing build via the cli)
+### start( repository, [projectName], [skipPacking], [verbose] )
+Start the build for all eligible projects defined in the build file. Returns a promise that resolves to an array of packageInformation for each successful build. You can optionally provide a `projectName` to limit the build to a specific project. You can also provide an optional `true` argument to cause this to skip the packaging step. (primarily for use in testing build via the cli) Finally, the optional `verbose` flag will pipe all build step output to the current process's IO.
 
 ```javascript
 // repository - either the path to the git repository or metadata about the repository

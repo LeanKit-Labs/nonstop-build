@@ -1,4 +1,7 @@
-## 0.1.0
+## 0.1.*
+
+### 0.1.0
+ * Support verbose output from build steps
 
 ### prerelease 18
  * Update dependencies

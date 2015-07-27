@@ -70,7 +70,7 @@ describe( 'Project', function() {
 
 	describe( 'when creating build with no package for a project', function() {
 		var packageInfo;
-
+		var out = [];
 		before( function( done ) {
 			this.timeout( 1000 );
 			var projectConfig = {
@@ -95,6 +95,19 @@ describe( 'Project', function() {
 			var p = project.create( 'project1', projectConfig, repoInfo );
 			p
 				.build( true )
+				.then( null, null, function( data ) {
+					if( out.length === 0 ) {
+						out.push( data.stderr );
+					} else {
+						var line = out[ out.length - 1 ];
+						line = line + data.stderr;
+						out[ out.length - 1 ] = line;
+					}
+					if( /\n/.test( data.stderr ) ) {
+						out.push( "" );
+					}
+
+				} )
 				.then( function( info ) {
 					packageInfo = info;
 					done();
@@ -113,6 +126,16 @@ describe( 'Project', function() {
 				pattern: './node_modules/**,./src/**',
 				version: '0.0.1'
 			} );
+		} );
+
+		it( 'should have notified of build output', function() {
+			out.should.eql(
+				[
+					'npm WARN package.json test-agent@0.0.1 No repository field.\n',
+					'npm WARN package.json test-agent@0.0.1 No README data\n',
+					''
+				]
+			);
 		} );
 
 		it( 'should not create archive', function() {
