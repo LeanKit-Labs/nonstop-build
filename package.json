@@ -1,6 +1,6 @@
 {
   "name": "nonstop-build",
-  "version": "0.1.0-8",
+  "version": "0.1.0",
   "description": "Library for producing packages from nonstop build files",
   "main": "src/build.js",
   "scripts": {
@@ -15,28 +15,40 @@
     "ci",
     "build"
   ],
-  "author": "Alex Robson",
-  "license": "MIT License",
+  "author": "LeanKit",
+  "contributors": [
+    {
+      "name": "Alex Robson",
+      "url": "http://nerdventure.io"
+    }
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/LeanKit-Labs/nonstop-build/issues"
   },
   "homepage": "https://github.com/LeanKit-Labs/nonstop-build",
   "devDependencies": {
     "gulp": "^3.8.7",
+    "gulp-istanbul": "^0.5.0",
     "gulp-mocha": "^1.0.0",
-    "should": "^4.0.4"
+    "open": "0.0.5",
+    "should": "^4.0.4",
+    "sinon": "^1.12.2"
   },
   "dependencies": {
-    "configya": "~0.1.0",
+    "configya": "~0.2.1",
     "debug": "^2.0.0",
-    "drudgeon": "~0.1.0",
+    "drudgeon": "~0.2.0",
+    "globulesce": "^0.1.4",
     "js-yaml": "^3.2.1",
     "lodash": "^2.4.1",
     "machina": "^0.4.0-1",
     "map-stream": "0.0.5",
     "monologue.js": "^0.1.4",
-    "nonstop-pack": "~0.1.0",
-    "vinyl-fs": "^0.3.7",
+    "nonstop-pack": "~0.2.0",
     "when": "^3.4.5"
   }
 }

@@ -6,9 +6,8 @@ var drudgeon = require( 'drudgeon' );
 var debug = require( 'debug' )( 'nonstop:project' );
 var packager = require( 'nonstop-pack' );
 var path = require( 'path' );
-var platform = require( 'os' ).platform();
 
-function createProjectMachine( name, config, repInfo ) {
+function createProjectMachine( name, config, repInfo, verbose ) {
 	var Machine = machina.Fsm.extend( {
 		_handler: function( ev ) {
 			return function( result ) {
@@ -17,17 +16,24 @@ function createProjectMachine( name, config, repInfo ) {
 		},
 
 		_handlers: function( op ) {
+			var context = this;
 			return {
-				progress: function( data ) { this.emit( op + '.data', data ); }.bind( this ),
-				success: this._handler( op + '-done' ),
-				failure: this._handler( op + '-failed' )
+				progress: function( data ) {
+					this.emit( op + '.data', data );
+				}.bind( context ),
+				success: context._handler( op + '-done' ),
+				failure: context._handler( op + '-failed' )
 			};
 		},
 
 		_build: function() {
 			var basePath = path.join( ( repInfo.path ? repInfo.path : repInfo ), config.path );
-			this.project = drudgeon( config.steps, basePath );
-			this._promise( 'build', this.project.run );			
+			this.project = drudgeon( config.steps, { relativePath: basePath, inheritIO: verbose } );
+			this.project.on( 'starting.#', function( stepName ) {
+				// console.log( 'Starting \'' + stepName + '\'' );
+				this.emit( 'build.data', { step: stepName } );
+			} );
+			this._promise( 'build', this.project.run );
 		},
 
 		_getPackageInfo: function() {
@@ -44,7 +50,8 @@ function createProjectMachine( name, config, repInfo ) {
 			promise.apply( null, args )
 				.progress( handles.progress )
 				.then( handles.success )
-				.then( null, handles.failure );
+				.then( null, handles.failure )
+				.catch( handles.failure );
 		},
 
 		_upload: function( packageInfo ) {
@@ -52,11 +59,13 @@ function createProjectMachine( name, config, repInfo ) {
 		},
 
 		build: function( noPack ) {
-			this.noPack = noPack;
+			this.noPack = noPack || !( config.pack && config.pack.pattern );
 			return when.promise( function( resolve, reject, notify ) {
 				var eventSubscription = this.on( 'build.data', function( line ) {
-					debug( '\t %s', line.data.replace( '\n', '' ) );
-					notify( line );
+					debug( '\t %s', line.data ? line.data.replace( '\n', '' ) : line );
+					if ( notify ) {
+						notify( line );
+					}
 				}.bind( this ) );
 				this.on( 'project.done', function( packageInfo ) {
 					eventSubscription.unsubscribe();
@@ -65,11 +74,14 @@ function createProjectMachine( name, config, repInfo ) {
 				this.on( 'project.failed', function( err ) {
 					eventSubscription.unsubscribe();
 					var stack = err.error ? ( err.error.stack || err.error ) : 'no error provided';
-					var error = new Error( 'Step ' + err.step + ' failed with error: ' + stack );
-					reject( error );
+					reject( new Error( 'Step "' + err.step + '" failed: ' + stack ) );
 				}.bind( this ) ).once();
 				this.transition( 'initializing' );
 			}.bind( this ) );
+		},
+
+		initialize: function() {
+			this.name = name;
 		},
 
 		states: {
@@ -85,7 +97,7 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'packageInfo-failed': function( err ) {
 					debug( 'failed to attain package info for %s %s', name, this.version );
-					this.emit( 'project.failed', { step: 'packageInfo', error: err } );
+					this.emit( 'project.failed', { step: 'packageInfo', error: err.toString().replace( 'Error: ', '' ) } );
 				},
 			},
 			'building': {
@@ -97,7 +109,10 @@ function createProjectMachine( name, config, repInfo ) {
 					this.transition( this.noPack ? 'done' : 'packaging' );
 				},
 				'build-failed': function( err ) {
-					debug( 'build failed for %s %s with %s', name, this.version, err.stack );
+					if ( err.failedStep ) {
+						err = err[ err.failedStep ].join( '\n' ) || 'build step "' + err.failedStep + '" exited with a non-zero code';
+					}
+					debug( 'build failed for %s %s with %s', name, this.version, err.stack ? err.stack : err );
 					this.emit( 'project.failed', { step: 'build', error: err } );
 				}
 			},
@@ -111,7 +126,7 @@ function createProjectMachine( name, config, repInfo ) {
 				},
 				'package-failed': function( err ) {
 					debug( 'packaging for %s %s failed with %s', name, this.version, err.stack );
-					this.emit( 'project.failed', { step: 'pack', error: err } );
+					this.emit( 'project.failed', { step: 'pack', error: err.toString().replace( 'Error: ', '' ) } );
 				}
 			},
 			done: {

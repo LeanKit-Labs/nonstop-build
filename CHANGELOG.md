@@ -1,10 +1,29 @@
-## 0.1.0
+## 0.1.*
 
-### prerelease 8
+### 0.1.0
+ * Support verbose output from build steps
+
+### prerelease 18
+ * Update dependencies
+ * Print current build step to console
+
+### prerelease 17
+ * Bug fix - repo path not passed when building specific project
+ * Clean up error messages
+ * Add name to project during initialization
+ * Build all projects despite individual failures
+
+### prerelease 12
+ * Bug fixes around handling exceptions
+ * Better test coverage and addition of istanbul to gulpfile
+
+### prerelease 10
+ * Skip packing step when configuration is missing
+ * Remove vinyl in favor of globulesce (a faster way to search for build files).
  * Pull out step runner into a new library - [drudgeon](https://github.com/LeanKit-Labs/drudgeon)
 
 ### prerelease 7
- * Improve how build files get searched for. Consult you a [Doug Neiner](https://github.com/dcneiner) for great good! 
+ * Improve how build files get searched for. Consult you a [Doug Neiner](https://github.com/dcneiner) for great good!
  * Add ability to persist build data as JSON or YAML formatted file.
 
 ### prerelease 6
