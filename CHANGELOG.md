@@ -1,5 +1,9 @@
 ## 0.1.*
 
+### 0.1.1
+ * Update nonstop-pack to 0.2.0
+ * Improve portability of specs
+
 ### 0.1.0
  * Support verbose output from build steps
 
