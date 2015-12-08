@@ -33,7 +33,7 @@ describe( 'Build File', function() {
 	} );
 
 	describe( 'YAML file', function() {
-		
+
 		before( function() {
 			buildFile.save( './spec/files/nonstop.yaml', buildData, 'yaml' );
 		} );
@@ -42,7 +42,7 @@ describe( 'Build File', function() {
 			var config;
 			before( function( done ) {
 				buildFile.get( './spec/files' )
-					.then( function( c ) { 
+					.then( function( c ) {
 						config = c;
 						done();
 					} );
@@ -74,7 +74,7 @@ describe( 'Build File', function() {
 	} );
 
 	describe( 'JSON file', function() {
-		
+
 		before( function() {
 			buildFile.save( './spec/files/nonstop.json', buildData, 'json' );
 		} );
@@ -83,7 +83,7 @@ describe( 'Build File', function() {
 			var config;
 			before( function( done ) {
 				buildFile.get( './spec/files' )
-					.then( function( c ) { 
+					.then( function( c ) {
 						config = c;
 						done();
 					} );
@@ -128,7 +128,7 @@ describe( 'Build File', function() {
 		} );
 
 		it( 'should get error', function() {
-			error.toString().should.equal( 'Error: Failed to load a nonstop configuration file with JS-YAML: end of the stream or a document separator is expected at line 10, column 1:\n    :\n    ^' );
+			error.toString().should.equal( 'Error: Failed to load a nonstop configuration file with YAMLException: end of the stream or a document separator is expected at line 10, column 1:\n    :\n    ^' );
 		} );
 	} );
 

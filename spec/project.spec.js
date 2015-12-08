@@ -47,7 +47,8 @@ describe( 'Project', function() {
 				owner: 'arobson',
 				path: path.resolve( './spec/testProject/' ),
 				pattern: './node_modules/**,./src/**',
-				version: '0.0.1'
+				version: '0.0.1',
+				slug: undefined
 			} );
 		} );
 
@@ -124,7 +125,8 @@ describe( 'Project', function() {
 				owner: 'arobson',
 				path: path.resolve( './spec/testProject/' ),
 				pattern: './node_modules/**,./src/**',
-				version: '0.0.1'
+				version: '0.0.1',
+				slug: undefined
 			} );
 		} );
 
@@ -189,7 +191,7 @@ describe( 'Project', function() {
 		} );
 
 		it( 'should report problem', function() {
-			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "packageInfo" failed: Cannot search for version files in bad path "/git/labs/nonstop/nonstop-build/spec/murhurhurhur"' );
+			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "packageInfo" failed: Cannot search for version files in bad path "' + path.resolve( './' ) + '/spec/murhurhurhur"' );
 		} );
 
 		it( 'should not have produced output', function() {
@@ -231,7 +233,7 @@ describe( 'Project', function() {
 		} );
 
 		it( 'should report problem', function() {
-			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "pack" failed: No files matched the pattern "./lol/**" in path "/git/labs/nonstop/nonstop-build/spec/testProject". No package was generated.' );
+			error.toString().split( '\n' )[ 0 ].should.equal( 'Error: Step "pack" failed: No files matched the pattern "./lol/**" in path "' + path.resolve( './' ) + '/spec/testProject". No package was generated.' );
 		} );
 
 		it( 'should not have produced output', function() {
